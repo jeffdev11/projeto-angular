@@ -1,0 +1,22 @@
+<nz-layout>
+  <nz-header>
+    <a class="logo" routerLink="/home">
+      <img src="assets/images/logo.webp" alt="logo">
+      <h1>PROJETO ANGULAR</h1>
+    </a>
+    <ul nz-menu nzTheme="dark" nzMode="horizontal">
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/home">HOME</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/readme">README</a>
+      </li>
+    </ul>
+  </nz-header>
+  <nz-content>
+    <div class="inner-content">
+      <router-outlet></router-outlet>
+    </div>
+  </nz-content>
+  <nz-footer>PROJETO ANGULAR DE APRESENTAÇÃO PARA A LINKEDRH - CONFIRA O <a routerLink="/readme">README</a></nz-footer>
+</nz-layout>

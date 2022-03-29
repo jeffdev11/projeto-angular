@@ -1,0 +1,79 @@
+<div>
+    <div class="tw-grid tw-grid-cols-1 md-min:tw-grid-cols-12">
+        <div class="tw-col-span-5 tw-p-[10px]">
+            <div class="list-group">
+                <nz-list nzBordered>
+                    <nz-list-header><button nz-button nzType="primary" nzSize="small" class="audio-new"
+                            (click)="newAudio()">ADD</button> LIST OF SONGS
+                        - (CLICK ON THE
+                        SONG TITLE TO EDIT)
+                    </nz-list-header>
+                    <nz-list-item class="audio" [class.active]="selected?.id === audio.id"
+                        [class.favorite]="audio?.favorite" [ngStyle]="{'color': audio.color ? audio.color : 'black'}"
+                        *ngFor="let audio of playlist" (click)="selectAudio(audio)">
+                        > {{audio.title}}
+                    </nz-list-item>
+                    <nz-list-footer>Total: {{playlist.length}}</nz-list-footer>
+                </nz-list>
+
+            </div>
+        </div>
+        <div class="tw-col-span-7 tw-p-[10px]">
+            <div *ngIf="selected">
+                <form (ngSubmit)="saveAudio(f.value)" #f="ngForm">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input nz-input class="audio-title form-control" name="title" #title="ngModel"
+                            [ngModel]="selected?.title" required>
+                        <div class="form-error" *ngIf="title.errors && (title.dirty || title.touched)">
+                            <p *ngIf="title.errors.required">
+                                This field is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="soundcloud_code">SoundCloud Code:</label>
+                        <textarea nz-input class="audio-soundcloud_code form-control" name="soundcloud_code"
+                            #soundcloud_code="ngModel" [ngModel]="selected?.soundcloud_code" required></textarea>
+                        <div class="form-error"
+                            *ngIf="soundcloud_code.errors && (soundcloud_code.dirty || soundcloud_code.touched)">
+                            <p *ngIf="soundcloud_code.errors.required">
+                                This field is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="favorite">Favorite:</label>
+                        <label nz-checkbox class="audio-favorite" name="favorite"
+                            [ngModel]="selected?.favorite"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="color">Color:</label>
+                        <input type="color" class="audio-color" name="color" [ngModel]="selected?.color">
+                    </div>
+                    <div class="form-group">
+                        <button nz-button nzType="primary" class="btn btn-success audio-save" type="submit"
+                            [disabled]="!f.valid">{{selected.id ? 'UPDATE' : 'SAVE'}}</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<h1 class="tw-text-center">SOUNDCLOUND PLAYLIST</h1>
+
+<cdk-virtual-scroll-viewport itemSize="220" minBufferPx="1100" maxBufferPx="1100" class="playlist-virtualscroll">
+    <div *cdkVirtualFor="let item of playlist" class="playlist-virtualscroll-item"
+        style="margin: 30px 0px; padding: 10px;">
+        <h3 [class.favorite]="item?.favorite" [ngStyle]="{'color': item.color ? item.color : 'black'}">
+            {{item.title}}
+        </h3>
+        <div>
+            <div [innerHTML]="item.soundcloud_code | bypass:'html'">
+            </div>
+        </div>
+        <hr />
+    </div>
+</cdk-virtual-scroll-viewport>

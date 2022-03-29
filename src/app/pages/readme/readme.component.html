@@ -1,0 +1,115 @@
+<div>
+    <h1>1 - Como testar o cadastro de áudios do Soundcloud</h1>
+    <p>Navegue até o site <a href="https://soundcloud.com/discover" target="_blank">https://soundcloud.com/discover</a>
+        pesquise e escolha uma música, após escolher clique no botão compartilar como mostra na imagem abaixo:
+        <img src="https://i.imgur.com/HcxzMPC.png" />
+    </p>
+    <p>Após clicar em compartilhar irá abrir uma modal, clique na aba "Incorporado", deixe selecionado as opções como
+        mostradas
+        na imagem abaixo e copie o código:
+        <img src="https://i.imgur.com/CuKsxUx.png" />
+    </p>
+    <p>Vá até a página Home deste projeto Angular e clique no botão "ADD", após isso um formulário a direita da lista de
+        áudios irá aparecer, insira o título, cole o código soundcloud, escolha se quer favoritar o áudio e escolha uma
+        cor para o título do áudio como mostra na imagem abaixo:
+        <img src="https://i.imgur.com/KAusKkr.png" />
+    </p>
+    <p>A música adicionada irá aparecer no final da playlist como mostra na imagem a seguir: <img
+            src="https://i.imgur.com/5h846j4.png"></p>
+    <hr />
+    <h1>2 - Entendendo a proposta e a lógica de funcionamento</h1>
+    <p>O intuito deste projeto é apresentar algumas técnicas da tecnologia Angular para apresentar uma playlist de
+        músicas do
+        Soundcloud e um formulário simples para adicionar e editar estes áudios, neste processo foi utilizado testes
+        unitários, pipes para manipulação dos dados e performance no change detection do Angular, mocks, factory
+        pattern, services, lazy-loading de componentes, pré-processadores, formulário no modelo template-driven, virtual
+        scroll da playlist
+        para uma melhor performance quando se tem uma grande lista de itens, alteração do modo de detecção de alterações
+        do Angular para OnPush para uma melhor performance e evitar change detection desnecessário, mais detalhes serão
+        apresentandos nos tópicos abaixo.</p>
+    <hr />
+    <h1>3 - Testes Unitários</h1>
+    <p>Foram criados testes unitários para apresentar como podemos garantir requisitos no funcionamento do formulário de
+        cadastro/edição dos áudios, os testes unitários criados garantem que sejam cumpridas as seguintes regras:
+    </p>
+    <ul>
+        <li>O formulário deve ficar vazio após um áudio ser cadastrado</li>
+        <li>A lista deve apresentar todos os áudios</li>
+        <li>Ao clicar no título do áudio ele deve ser selecionado e aplicado a classe 'active'</li>
+        <li>Os inputs devem ser preenchidos ao editar um áudio</li>
+        <li>Deverá salvar o áudio quando o botão 'Save' for clicado</li>
+        <li>Deverá salvar o áudio utilizando o serviço 'PlaylistService' quando o formulário for enviado</li>
+        <li>O botão de envio do formulário deve permanecer desabilitado enquanto os campos obrigatórios não forem
+            preenchidos</li>
+        <li>Não deverá aparecer mensagens de erro caso o formulário esteja válido</li>
+        <li>Não deverá alterar os dados do áudio na lista enquanto não for enviado</li>
+        <li>Ao salvar um áudio, ele deve permanecer selecionado</li>
+        <li>O título do áudio deve ser 16px caso esteja marcado a opção de favorito</li>
+        <li>É preciso que o título tenha a cor salva na variável 'color'</li>
+    </ul>
+    <h1>4 - Pré Processadores CSS - SASS e LESS</h1>
+    <p>Foram utilizados exemplos simples da utilização do SASS e LESS, sendo o LESS utilizado para o layout principal do
+        AppComponent e o SASS para os demais componentes HomeComponent e ReadmeComponent</p>
+    <h1>5 - Inicialização de dados default com o padrão Factory</h1>
+    <p>Foi utilizado um Factory para inicialização da playlist com 3 áudios iniciais, esse Factory foi escrito no
+        AppModule e foi configurado no provider</p>
+    <pre><code>
+        export function playlistFactory() {{ '{' }}
+            const service = new PlaylistService();
+            service['playlist'] = mockPlaylist;
+            return service;
+        }
+    </code></pre>
+    <p>...</p>
+    <pre><code>
+        providers: [..., {{ '{' }}
+            provide: PlaylistService,
+            useFactory: playlistFactory
+          }]
+    </code></pre>
+    <h1>6 - PIPES</h1>
+    <p>O uso de pipes é importante não só para simplificar a manipulação dos dados como também para melhorar performance
+        do change detection do Angular, o pipe utilizado nesta aplicação foi o de nome BypassPipe que tem como objetivo
+        permitir que seja injetado o html do Soundcloud na página, este pipe recebe como parametro o tipo de dado que
+        queremos injetar no HTML da página, segue para visualização de como o pipe foi implementado:
+    </p>
+    <pre><code>
+        transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {{ '{' }}
+            switch (type) {{ '{' }}
+              case 'html':
+                return this._sanitizer.bypassSecurityTrustHtml(value);
+              case 'style':
+                return this._sanitizer.bypassSecurityTrustStyle(value);
+              case 'script':
+                return this._sanitizer.bypassSecurityTrustScript(value);
+              case 'url':
+                return this._sanitizer.bypassSecurityTrustUrl(value);
+              case 'resourceUrl':
+                return this._sanitizer.bypassSecurityTrustResourceUrl(value);
+              default:
+                return this._sanitizer.bypassSecurityTrustHtml(value);
+            }
+          }
+    </code></pre>
+    <h1>7 - UI KIT e Framework CSS Tailwind</h1>
+    <p>Neste projeto podemos ver a utilização do UI KIT NG ZORRO e do Framwork CSS Tailwind, que ajuda bastante a
+        estilizar componentes com classes pré prontas, recentemente o Angular recebeu suporte para o Tailwind, o uso é
+        simples, o Tailwind possui classes para vários tipos de manipulação de CSS incluve para eventos como é o caso do
+        'hover'. <img src="https://i.imgur.com/fY94imd.png" class="tw-w-[100%]" alt="Tailwind" /></p>
+
+    <h1>8 - Considerações Finais</h1>
+    <p>Um projeto real em Angular segue uma estrutura muito mais elabora do que esse simples projeto, além de mesmo as
+        tecnologias aqui abordadas são utilizadas de forma bem mais estruturada e avançada, existem vários outros
+        recursos do Angular que não coloquei neste projeto pois não queria me alongar para
+        entregar
+        alguns códigos de exemplo como solicitado via e-mail, vários recursos como é o caso de controle de estado com
+        NGXS/RXJS, testes de integração, testes e2e com
+        Cypress, recursos como passagem de parametros via Input e Output, segurança de rotas, Web Worker para fazer
+        processamentos em outra thread sem ser na thread da UI, e por ai vai, o Angular é um framework bem
+        completo e somente em projetos reais conseguimos ver todos esses recursos aplicados de forma mais elegante.</p>
+    <p>Resolvi fazer esse pequeno projeto pois acredito que seria melhor para visualização do que exemplos de códigos
+        isolados tirados dos
+        meus projetos em Angular, por aqui ao menos podemos ver o funcionamento e testar mesmo que seja algo simples.
+    </p>
+
+</div>
