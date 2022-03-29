@@ -43,8 +43,21 @@ export class HomeComponent implements OnInit {
   }
 
   saveAudio(audio: Audio) {
-    this.selected = this.playlistService.saveAudio(Object.assign({ id: this.selected?.id }, audio) as Audio);
-    this.loadAudios();
+    if (audio.soundcloud_code.indexOf("<iframe") > -1 && audio.soundcloud_code.indexOf("soundcloud.com") > -1) {
+      this.selected = this.playlistService.saveAudio(Object.assign({ id: this.selected?.id }, audio) as Audio);
+      this.loadAudios();
+      this.notification.create(
+        'success',
+        'Audio ' + (this.selected?.id ? 'updated' : 'saved') + ' successfully',
+        'Success'
+      );
+    } else {
+      this.notification.create(
+        'error',
+        'Error',
+        'Please insert a valid Soundcloud code'
+      );
+    }
   }
 
 }
