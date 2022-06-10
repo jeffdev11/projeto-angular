@@ -1,6 +1,8 @@
+![LinkedRH](https://i.imgur.com/D3jd1wk.png)
+
 ## COMO CLONAR ESTE REPOSITÓRIO
 
-    git clone {{url}} --recursive (LEIA A OBSERVAÇÃO ANTES DE RODAR ESTE COMANDO)
+    git clone {{url}} --depth 30 --recursive (LEIA A OBSERVAÇÃO ANTES DE RODAR ESTE COMANDO)
 
 OBS: Esse comando deve ser utilizado somente por quem tem permissão de acesso de todos os repositórios dos submodules, caso contrário deve ser feito o clone sem a flag --recursive.
 
@@ -11,6 +13,8 @@ Em caso de o usuário git ter acesso somente a alguns submodules, após clonar o
 Dica: caso seja necessário saber o nome dos submodules, utilize o comando:
 
     git submodule
+
+A flag --depth 30 indica que o clone deve ser feito com a profundidade máxima de 30 commits mais recentes, isso é útil para evitar um clone demorado quando já tem um longo histórico de commit.
 
 ## COMO RODAR A APLICAÇÃO DEFAULT OU UMA ESPECÍFICA
 
@@ -394,6 +398,10 @@ além disso eu deixei essa pipe preparada para suportar mais argumentos, exemplo
     [toolTip]="'valor' | genericCustomHandler : metodo : this : 'arg1' : 'arg2'"
 
 caso nenhum destes cenários atenda o seu requisito basta criar uma nova pipe.
+
+![Change Detection](https://i.imgur.com/8vt6EYn.gif)
+
+![Change Detection](https://i.imgur.com/dk7rDes.gif)
 
 ## COMO RODAR O LINT
 
